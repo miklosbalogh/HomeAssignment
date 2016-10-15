@@ -8,6 +8,6 @@
         }
 
         //TODO: GET IT FROM CONFIG FILE
-        public string ConnectionString { get; set; } = "";
+        public string ConnectionString { get; set; } = @"C://temp/prezis.json";
     }
 }
