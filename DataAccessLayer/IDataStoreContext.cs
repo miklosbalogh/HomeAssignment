@@ -7,7 +7,7 @@ namespace DataAccessLayer
 {
     public interface IDataStoreContext : IDisposable
     {
-        string ConnectionString { get; }
+        string ConnectionString { get; set; }
         Task<IEnumerable<Presentation>> GetPresentations();
     }
 }

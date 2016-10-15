@@ -13,7 +13,7 @@ namespace DataAccessLayer.Implementation
             ConnectionString = path;
         }
 
-        public string ConnectionString { get; private set; }
+        public string ConnectionString { get; }
 
         public async Task<IEnumerable<Presentation>> GetPresentations()
         {
