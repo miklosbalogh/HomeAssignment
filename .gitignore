@@ -250,3 +250,8 @@ paket-files/
 # JetBrains Rider
 .idea/
 *.sln.iml
+/PresentationsService/PresentationsService.v2.ncrunchproject
+/HomeAssignment.v2.ncrunchsolution
+/DomainModel/DomainModel.v2.ncrunchproject
+/DataAccessLayer/DataAccessLayer.v2.ncrunchproject
+/DataAccesLayer.Tests/DataAccesLayer.Tests.v2.ncrunchproject

@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="IDataStoreContext.cs" />
     <Compile Include="IDataStoreContextFactory.cs" />
+    <Compile Include="Implementation\DataStoreContextFactory.cs" />
     <Compile Include="Implementation\PresentationJsonFileContext.cs" />
     <Compile Include="Implementation\PresentationRepository.cs" />
     <Compile Include="IPresentationRepository.cs" />
