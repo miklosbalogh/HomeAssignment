@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>React Tutorial</title>
+    <title>Prezis Viewer</title>
     <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
     <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
     <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
@@ -41,7 +41,7 @@
                 <div style={styles.titleStyle}>Title: {this.props.prezi.Title}</div>
                 <div style={styles.imageWrapper}><img src={this.props.prezi.ThumbNail} /></div>
                 <p>Creator: <a href={this.props.prezi.Creator.ProfileUrl}>{this.props.prezi.Creator.Name}</a></p>
-                <p>Taken: {this.props.prezi.CreatedAt} </p>
+                <p>Creation Date: {new Date(this.props.prezi.CreatedAt).toDateString()} </p>
             </div>
         </td>
         );
@@ -130,7 +130,7 @@
 					<table>
 						<tbody>
 							<tr>
-								<td>OrderBy: Creation Date </td>
+								<td>Sort by Creation Date </td>
 								<td><input type="radio" name="sortingRadio" value="ASC" checked={this.props.sortOption === "ASC"} onChange={this.handleRadioSelection}/>ASC</td>
 								<td><input type="radio" name="sortingRadio" value="DESC" checked={this.props.sortOption === "DESC"} onChange={this.handleRadioSelection}/>DESC</td>
 							</tr>

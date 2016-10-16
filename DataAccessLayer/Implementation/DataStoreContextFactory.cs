@@ -7,7 +7,6 @@
             return new PresentationJsonFileContext(ConnectionString);
         }
 
-        //TODO: GET IT FROM CONFIG FILE
-        public string ConnectionString { get; set; } = @"C://temp/prezis.json";
+        public string ConnectionString { get; set; }
     }
 }

@@ -6,21 +6,20 @@ namespace PresentationsService.Controllers
 {
     public class HomeController : ApiController
     {
-        private readonly IDataStoreContextFactory<IDataStoreContext> _dataStoreContextFactory;
+        //TODO: GET IT FROM CONFIG FILE
+        private const string _relativePathToDataStore = @"~/App_Data/prezis.json";
+        private readonly IPresentationRepository _presentationRepository;
 
-        public HomeController(IDataStoreContextFactory<IDataStoreContext> dataStoreContextFactory)
+        public HomeController(IPresentationRepository presentationRepository)
         {
-            _dataStoreContextFactory = dataStoreContextFactory;
+            _presentationRepository = presentationRepository;
+            _presentationRepository.ConnectionString = System.Web.Hosting.HostingEnvironment.MapPath(_relativePathToDataStore);
         }
 
         [HttpGet]
         public async Task<IHttpActionResult> GetPrezis()
         {
-            using (var dataStoreContext = _dataStoreContextFactory.CreateDataStoreContext())
-            {
-                var preziList = await dataStoreContext.GetPresentations();
-                return Ok(preziList);
-            }
+            return Ok(await _presentationRepository.GetPresentations());
         }
     }
 }
