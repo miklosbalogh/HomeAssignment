@@ -1,0 +1,196 @@
+﻿<!-- index.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>React Tutorial</title>
+    <script src="https://unpkg.com/react@15.3.2/dist/react.js"></script>
+    <script src="https://unpkg.com/react-dom@15.3.2/dist/react-dom.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6.15.0/babel.min.js"></script>
+    <script src="https://unpkg.com/jquery@3.1.0/dist/jquery.min.js"></script>
+    <script src="https://unpkg.com/remarkable@1.7.1/dist/remarkable.min.js"></script>
+</head>
+<body>
+    <div id="content"></div>
+    <script type="text/babel">
+        var PreziCell = React.createClass({
+        render: function(){
+		
+		  var styles = {
+			preziTableCell: {
+			  display: 'inline-block',
+			  boxSizing: 'border-box',
+			  float: 'left',
+			  backgroundColor: 'cornSilk',
+			  fontFamily: 'Helvetica Neue, sans-serif'
+			},
+			imageWrapper: {
+			  position: 'relative',
+			  width: '100%',
+			},
+			titleStyle:{
+				color: 'darkblue',
+				fontWeight: 'bold',
+				paddingBottom: '3%',
+				paddingTop: '3%',
+			}
+		  };
+        return (
+        <td>
+            <div style={styles.preziTableCell}>
+                <div style={styles.titleStyle}>Title: {this.props.prezi.Title}</div>
+                <div style={styles.imageWrapper}><img src={this.props.prezi.ThumbNail} /></div>
+                <p>Creator: <a href={this.props.prezi.Creator.ProfileUrl}>{this.props.prezi.Creator.Name}</a></p>
+                <p>Taken: {this.props.prezi.CreatedAt} </p>
+            </div>
+        </td>
+        );
+        }
+        });
+
+        var PreziTableRow = React.createClass({
+			render: function(){
+				var cells = [];
+				var sI = this.props.startIndex;
+				var lI = this.props.lastIndex
+				for(var i=sI; i < lI; i++)
+				{
+					cells.push(<PreziCell prezi={this.props.prezis[i]} />);
+				}
+
+				return (
+					<tr>{cells}</tr>);
+				}
+        });
+
+        var PreziTable = React.createClass({
+			render: function(){
+				var colCount = 3;
+				var rows = [];
+				var rowIndexStart = 0;
+				var rowIndexLast = 0;
+				
+				var filteredPrezis = this.props.prezis.filter(function(prezi){
+					return prezi.Title.indexOf(this.props.filterText) !== -1
+				}.bind(this));
+				
+				console.log(this.props.sortOption)
+				var filteredSortedPrezis = filteredPrezis.sort(function(a,b){
+					
+					var firstDate = new Date(this.props.sortOption === "ASC" ? a.CreatedAt : b.CreatedAt);
+					var secondDate = new Date(this.props.sortOption === "ASC" ? b.CreatedAt : a.CreatedAt);
+										
+					return firstDate - secondDate;
+				}.bind(this));
+				
+				var allCellCount = filteredPrezis.length;
+				var processArray = true;
+				while(processArray)
+				{
+					rowIndexStart = rowIndexLast;
+					rowIndexLast += colCount;
+					if(rowIndexLast > allCellCount)
+					{
+						rowIndexLast = allCellCount;
+						processArray = false;
+					}
+					rows.push(<PreziTableRow prezis={filteredSortedPrezis} startIndex={rowIndexStart} lastIndex={rowIndexLast} />)
+				}
+
+				return (
+						<table>
+							<tbody>
+								{rows}
+							</tbody>
+						</table>);
+			}
+        });
+
+        var SearchBox = React.createClass({
+			handleFilterTextChanged: function(){
+				this.props.onFilterChanged(this.refs.filterTextInput.value)
+			},
+			render: function(){
+				return (
+					<form>
+						<input type="text" placeholder="Search..." value={this.props.filterText} ref="filterTextInput" onChange={this.handleFilterTextChanged} />
+					</form>
+				);
+			}
+        });
+
+        var SortBar = React.createClass({
+			handleRadioSelection: function(e){
+				console.log(e.currentTarget)
+				this.props.onSortingChanged(e.currentTarget.value);
+			},
+			render: function(){
+				return(
+				<form>
+					<table>
+						<tbody>
+							<tr>
+								<td>OrderBy: Creation Date </td>
+								<td><input type="radio" name="sortingRadio" value="ASC" checked={this.props.sortOption === "ASC"} onChange={this.handleRadioSelection}/>ASC</td>
+								<td><input type="radio" name="sortingRadio" value="DESC" checked={this.props.sortOption === "DESC"} onChange={this.handleRadioSelection}/>DESC</td>
+							</tr>
+						</tbody>
+					</table>
+				</form>
+				);
+			}
+        });
+
+        var PreziBoard = React.createClass({
+        loadPrezisFromServer: function(){
+			$.ajax({
+				url:this.props.url,
+				dataType:'json',
+				cache: false,
+				success: function(data) {
+					this.setState({data: data});
+				}.bind(this),
+				error: function(xhr, status, err) {
+					console.error(this.props.url, status, err.toString());
+				}.bind(this)
+			})
+        },
+        getInitialState: function(){
+			return {data: [], filterText: ''}
+        },
+        componentDidMount: function(){
+			this.loadPrezisFromServer();
+        },
+		handleFilterInput: function(filterText){
+			this.setState({filterText: filterText});
+		},
+		handleSorting: function(sortOption){
+			this.setState({sortOption: sortOption});
+		},
+        render: function(){
+						
+			return (
+				<div>
+					<div>
+						<table>
+							<tbody>
+								<tr>
+									<td><SearchBox filterText={this.state.filterText} onFilterChanged = {this.handleFilterInput}/></td>
+									<td><SortBar sortOption={this.state.sortOption} onSortingChanged = {this.handleSorting} /></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					<PreziTable prezis={this.state.data} filterText={this.state.filterText} sortOption={this.state.sortOption} />
+				</div>
+			);
+        }
+        });
+
+
+        ReactDOM.render(
+        <PreziBoard url="http://localhost:49910/api/Home/GetPrezis" />,
+        document.getElementById('content'));
+    </script>
+</body>
+</html>

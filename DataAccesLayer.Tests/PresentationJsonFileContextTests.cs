@@ -25,7 +25,7 @@ namespace DataAccesLayer.Tests
             {
                 Id = "56f137f432fbb67217182785",
                 Title = "incididunt amet ad nostrud",
-                ThumbNailUrl = "https://placeimg.com/400/400/any",
+                ThumbNail = "https://placeimg.com/400/400/any",
                 Creator = new User { Name = "consectetur laborum", ProfileUrl = "http://randomprofile.prezi.com/" },
                 CreatedAt = new DateTime(2014, 3, 6)
             };
