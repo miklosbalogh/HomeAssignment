@@ -16,6 +16,7 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using DataAccessLayer;
+using DataAccessLayer.Logger;
 
 namespace PresentationsService.DependencyResolution {
     using StructureMap.Configuration.DSL;

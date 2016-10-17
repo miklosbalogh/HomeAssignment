@@ -87,6 +87,7 @@
     </Otherwise>
   </Choose>
   <ItemGroup>
+    <Compile Include="DataStoreContextFactoryTests.cs" />
     <Compile Include="PresentationJsonFileContextTests.cs" />
     <Compile Include="PresentationRepositoryTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

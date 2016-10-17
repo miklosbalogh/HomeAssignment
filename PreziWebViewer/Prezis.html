@@ -12,10 +12,10 @@
 </head>
 <body>
     <div id="content"></div>
-    <script type="text/babel">
+<script type="text/babel">
         var PreziCell = React.createClass({
         render: function(){
-		
+		//Styles should go to a separate file, also we should have more...
 		  var styles = {
 			preziTableCell: {
 			  display: 'inline-block',
@@ -50,31 +50,31 @@
 
         var PreziTableRow = React.createClass({
 			render: function(){
-				var cells = [];
-				var sI = this.props.startIndex;
-				var lI = this.props.lastIndex
-				for(var i=sI; i < lI; i++)
+				var row = [];
+				for(var i = this.props.startIndex; i < this.props.lastIndex; i++)
 				{
-					cells.push(<PreziCell prezi={this.props.prezis[i]} />);
+					row.push(<PreziCell prezi={this.props.prezis[i]} />);
 				}
 
 				return (
-					<tr>{cells}</tr>);
+					<tr>{row}</tr>);
 				}
         });
 
         var PreziTable = React.createClass({
 			render: function(){
+                //Currently hard coded. Could be configurable.
 				var colCount = 3;
 				var rows = [];
 				var rowIndexStart = 0;
 				var rowIndexLast = 0;
 				
+                //Filter Prezis
 				var filteredPrezis = this.props.prezis.filter(function(prezi){
 					return prezi.Title.indexOf(this.props.filterText) !== -1
 				}.bind(this));
 				
-				console.log(this.props.sortOption)
+                //Sort Prezis
 				var filteredSortedPrezis = filteredPrezis.sort(function(a,b){
 					
 					var firstDate = new Date(this.props.sortOption === "ASC" ? a.CreatedAt : b.CreatedAt);
@@ -83,6 +83,7 @@
 					return firstDate - secondDate;
 				}.bind(this));
 				
+                //Build PreziTable
 				var allCellCount = filteredPrezis.length;
 				var processArray = true;
 				while(processArray)
@@ -105,7 +106,8 @@
 						</table>);
 			}
         });
-
+    
+        //Search Controller
         var SearchBox = React.createClass({
 			handleFilterTextChanged: function(){
 				this.props.onFilterChanged(this.refs.filterTextInput.value)
@@ -118,7 +120,8 @@
 				);
 			}
         });
-
+    
+        //Sort Controller
         var SortBar = React.createClass({
 			handleRadioSelection: function(e){
 				console.log(e.currentTarget)
@@ -189,7 +192,7 @@
 
 
         ReactDOM.render(
-        <PreziBoard url="http://localhost:49910/api/Home/GetPrezis" />,
+        <PreziBoard url="http://localhost:49910/api/Home/GetPrezis" />, //Alert! This MUST come from config
         document.getElementById('content'));
     </script>
 </body>

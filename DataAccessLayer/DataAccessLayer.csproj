@@ -50,6 +50,8 @@
     <Compile Include="Implementation\PresentationJsonFileContext.cs" />
     <Compile Include="Implementation\PresentationRepository.cs" />
     <Compile Include="IPresentationRepository.cs" />
+    <Compile Include="Logger\DummyLogger.cs" />
+    <Compile Include="Logger\ILogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
